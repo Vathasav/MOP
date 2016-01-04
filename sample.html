@@ -6,49 +6,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet">
     <link href="main.css" rel="stylesheet">
-    <!--<style>
-    /* Remove the navbar's default margin-bottom and rounded borders */
-    .navbar {
-      margin-bottom: 0;
-      border-radius: 0;
-    }
-
-    /* Set height of the grid so .sidenav can be 100% (adjust as needed) */
-    .row.content {height: 450px}
-
-    /* Set gray background color and 100% height */
-    .sidenav {
-      padding-top: 20px;
-      background-color: #f1f1f1;
-      height: 100%;
-    }
-
-    /* Set black background color, white text and some padding */
-    footer {
-      background-color: #555;
-      color: white;
-      padding: 15px;
-    }
-
-    /* On small screens, set height to 'auto' for sidenav and grid */
-    @media screen and (max-width: 767px) {
-      .sidenav {
-        height: auto;
-        padding: 15px;
-      }
-      .row.content {height:auto;}
-    }
-
-    #page-wrap { position: relative; z-index: 2; width: 800px; height: 600px; margin: 10px auto; padding: 10px; background: white; }
-    p { font:15px/2 Georgia, Serif; margin: 0 0 30px 0; text-indent: 40px; }
-
-    #page-wrap2 { position: relative; z-index: 2; width: 1300px; height: 700px; margin: 50px auto; padding: 40px; background: white; -moz-box-shadow: 0 0 20px black; -webkit-box-shadow: 0 0 20px black; box-shadow: 0 0 20px black; }
-    p { font: 15px/2 Georgia, Serif; margin: 0 0 30px 0; text-indent: 40px; }
-
-
-
-  </style> -->
 </head>
+
+<!-- main page, add links to different sub-views -->
 <body ng-app = "gaApp">
 
 <nav class="navbar navbar-inverse">
@@ -79,176 +39,6 @@
 </div>
 
 
-<!--<script type="text/ng-template" id="home.html">
-
-<div id = "page-wrap" style = "text-align:justify;">
-  <h3 align = "center" style="font-size:300%;">Decision support Tools</h3> <br>
-  <p style="font-size:140%;">Many real world problems are of Multi-Objective nature. The objectives that have to be optimized are often conflicting and competing with each other. The decision making between optimizing multiple objectives is a challenging activity, where inclining towards one objective influences other objectives and vice-versa. For managing such multiple objective problems, decision support tools could aid the decision maker in finding a compromise between the multiple objectives. </p> <br>
-<p style="font-size:140%;">Managing technical debt in a software system is a multi-objective problem involves that trade-off between short-term and long-term value: taking shortcuts to optimize the delivery of features in the short term incurs debt, analogous to financial debt, that must be paid off later to optimize long-term success. We have created a decision support tool for managing technical debt in an existing software system. The tool can be explored in the TOOL section.
-</p>
-</div>
-
-
-</script>
-
-
-<script type="text/ng-template" id="about.html">
-
-    <h2> Details </h2>
-
-</script>
-
-<script type="text/ng-template" id="tool.html">
-    <div class="container-fluid text-center">
-    <div id = "page-wrap2">
-
-    <div class="collapse navbar-collapse" id="myNavbar">
-      <ul class="nav navbar-nav navbar-right"  style="margin-bottom:10px;">
-
-        <li> <input type = "text"  class = "form-control" placeholder="population size "ng-model = "populationSize">  </input> </li>
-
-        <li><input type = "text" class = "form-control" placeholder="generation size "ng-model = "generationSize">  </input> </li>
-
-        <li><button align = "center" style="margin-left:20px;"ng-click = "startAlgo()" class = "btn btn-primary"> Start </button></li>
-      </ul>
-      </div>
-
-      <ul class="nav nav-tabs">
-         <li class="active"><a href="#Tool/Input">Input</a></li>
-         <li><a href="#Tool/Results">Results</a></li>
-         <li><a href="#">Menu 2</a></li>
-      </ul>
-
-      </div>
-
-    </div>
-
-</script>
-
-<script type="text/ng-template" id="input.html">
-
-<div class="container-fluid text-center">
-<div id = "page-wrap2">
-
-<div class="collapse navbar-collapse" id="myNavbar">
-  <ul class="nav navbar-nav navbar-right"  style="margin-bottom:10px;">
-
-    <li> <input type = "text"  class = "form-control" placeholder="population size "ng-model = "populationSize">  </input> </li>
-
-    <li><input type = "text" class = "form-control" placeholder="generation size "ng-model = "generationSize">  </input> </li>
-
-    <li><button align = "center" style="margin-left:20px;"ng-click = "startAlgo()" class = "btn btn-primary"> Start </button></li>
-  </ul>
-  </div>
-
-  <ul class="nav nav-tabs">
-     <li class="active"><a href="#Tool/Input">Input</a></li>
-     <li><a href="#Tool/Results">Results</a></li>
-     <li><a href="#">Menu 2</a></li>
-  </ul>
-
-
-<div class="row content">
-    <div ng-controller="inputhandler">
-      <h2>Enter requirements</h2>
-
-      <div class="choosefile">
-           <input type = "file" id = "file" name = "file" onchange="angular.element(this).scope().onFileUpload(this)"/>
-      </div>
-
-
-      <form style="margin-top:30px;">
-
-        <div class="col-xs-12">
-
-            <div ng-repeat = "variable in variables ">
-
-              <div class="col-xs-4">
-
-                <input type = "text" class = "form-control" placeholder="Name" ng-model = "variable.name">  </input>
-              </div>
-
-              <div class="col-xs-4">
-
-                <input type = "text" class = "form-control" placeholder="Cost "ng-model = "variable.cost">  </input>
-
-              </div>
-
-              <div class="col-xs-4">
-
-                <input type = "text" class = "form-control" placeholder="Value "ng-model = "variable.satisfaction">  </input>
-
-              </div>
-
-
-            </div>
-
-          <button style="margin-top:10px;"ng-click = "addVariable(variables)"  class = "btn btn-primary"> Add new variable </button>
-        </div>
-
-      </form>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-
-
-
-</script>
-
-<script type="text/ng-template" id="results.html">
-
-<div class="container-fluid text-center">
-<div id = "page-wrap2">
-
-<div class="collapse navbar-collapse" id="myNavbar">
-  <ul class="nav navbar-nav navbar-right"  style="margin-bottom:10px;">
-
-    <li> <input type = "text"  class = "form-control" placeholder="population size "ng-model = "populationSize">  </input> </li>
-
-    <li><input type = "text" class = "form-control" placeholder="generation size "ng-model = "generationSize">  </input> </li>
-
-    <li><button align = "center" style="margin-left:20px;"ng-click = "startAlgo()" class = "btn btn-primary"> Start </button></li>
-  </ul>
-  </div>
-
-  <ul class="nav nav-tabs">
-     <li class="active"><a href="#Tool/Input">Input</a></li>
-     <li><a href="#Tool/Results">Results</a></li>
-     <li><a href="#">Menu 2</a></li>
-  </ul>
-
-
-<div class="row content">
-<div class="col-sm-8 text-left">
-
-       <div id = "graphArea" align = "left">
-
-       </div>
-
-     </div>
-     <div class="col-sm-4 sidenav">
-
-     <h2 align="center">Solutions</h2>
-
-        <div id = "graphArea2">
-
-        </div>
-     </div>
-
-</div>
-
-</div>
-
-</div>
-
-
-</script> -->
 
 
 <script  src = "http://d3js.org/d3.v3.js"></script>
@@ -258,7 +48,9 @@
 <!-- UI-Router -->
 <script src="http://angular-ui.github.io/ui-router/release/angular-ui-router.js"></script>
 
+<!-- genetic algorithm -->
 <script src = "geneticAlgo.js"></script>
+<!-- Graph Controller -->
 <script src = "graphControl.js"></script>
 <script src = "angularApp.js"></script>
 
@@ -267,21 +59,6 @@
   <p>Footer Text</p>
 </footer> -->
 </body>
-
-<!-- Home page information
-  <script type="text/ng-template" id="/home.html">
-		<div class="page-header">
-			<h2>Decision support tools</h2>
-		</div>
-
-	</script>
-
-  <script type="text/ng-template" id="/tool.html">
-  		<div class="page-header">
-  			<h2>Tool UI</h2>
-  		</div>
-
-  	</script> -->
 
 
 </html>

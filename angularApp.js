@@ -98,7 +98,7 @@ gaApp.controller("inputhandler",function($scope,variablesFactory,FileInputServic
 			 	var file = element.files[0];
              	FileInputService.readFileAsync(file).then(function (fileInputContent) {
              	fileData = fileInputContent;
-             	loadDataIntoModel($scope.variables, fileData);
+             	loadDataIntoModel($scope.variables, fileData , $scope.debtItems);
             });
 
 		});
@@ -110,6 +110,7 @@ gaApp.controller("inputhandler",function($scope,variablesFactory,FileInputServic
 
 });
 
+// service for loading file data asynchronously
 gaApp.service('FileInputService', function ($q) {
 
     this.readFileAsync = function (file) {
@@ -139,7 +140,7 @@ gaApp.service('FileInputService', function ($q) {
     };
 });
 
-
+// route the requests to appropriate views and controllers
 gaApp.config(function($stateProvider, $urlRouterProvider){
 
 
@@ -180,124 +181,17 @@ gaApp.config(function($stateProvider, $urlRouterProvider){
 
 });
 
-
-/*gaApp.config(['$routeProvider',
-  function($routeProvider) {
-    $routeProvider.
-      when('/Home', {
-	templateUrl: 'home.html',
-	controller: 'inputhandler'
-      }).
-      when('/About', {
-	templateUrl: 'about.html',
-	controller: 'inputhandler'
-      }).
-      when('/Tool', {
-	templateUrl: 'tool.html',
-	controller: 'inputhandler'
-      }).
-			when('/Tool/Input', {
-	templateUrl: 'tool.html',
-	controller: 'inputhandler'
-			}).
-			when('/Tool/Results', {
-	templateUrl: 'tool.html',
-	controller: 'inputhandler'
-			}).
-      otherwise({
-	redirectTo: '/Home'
-      });
-}]);*/
-
-function loadDataIntoModel(data, fileContent){
+// load data from file into the model
+function loadDataIntoModel(data, fileContent, debtData){
 
 
 		fileContent.forEach(function(f){
 			var arrayOfString = f.split(" ");
 			if (arrayOfString[0] !== "")
 				data.push({name:arrayOfString[0],cost:arrayOfString[1],satisfaction:arrayOfString[2]});
+
+				if(arrayOfString.length > 3)
+				debtData.push({debtItemName:arrayOfString[3],principal:arrayOfString[4],futureCost:arrayOfString[5]});
 	});
 
 }
-
-	       /*         var data2 = [
-                            {
-								"duration":25,
-								"cost":7400,
-								"stories":["userstory1","userstory2","userstory3","userstory4","userstory5"]
-                            },
-                            {
-
-                                "duration":40,
-								"cost":5300,
-								"stories":["userstory1","userstory2","userstory3"]
-                            },
-                            {
-
-                                "duration":60,
-								"cost":7260,
-								"stories":["userstory1","userstory3","userstory4","userstory5"]
-                            }
-                        ];
-
-
-   var sort = function(values){
-
-        var low = 0;
-        var high = values.length-1;
-
-         function quicksort(low, high)       {
-
-         	if(low >= high)
-         	    return;
-
-
-         	var i = low
-         	var j = high;
-
-          var pivot = Math.round(low + (high-low)/2);
-           var middle = values[pivot];
-
-         while (i <= j){
-
-              while(values[i] < middle)
-                   i++;
-
-              while(values[j] > middle)
-                 j--;
-
-             if(i <= j){
-
-             var temp = values[i];
-             values[i]=values[j];
-             values[j]=temp;
-
-             i++;
-             j--;
-
-
-}
-}
-
-      if (low < j)
-         quicksort(low,j);
-      if( i < high)
-         quicksort(i,high);
-
-
-
-
-
-
-}
-quicksort(low,high);
-
-console.log(values);
-
-
- return values;
-
-}
-
-
-*/
