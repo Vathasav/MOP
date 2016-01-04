@@ -1,0 +1,25 @@
+<div class="container-fluid text-center">
+<div id = "page-wrap2">
+
+<div class="collapse navbar-collapse" id="myNavbar">
+  <ul class="nav navbar-nav navbar-right"  style="margin-bottom:10px;">
+
+    <li> <input type = "text"  class = "form-control" placeholder="population size "ng-model = "populationSize">  </input> </li>
+
+    <li><input type = "text" class = "form-control" placeholder="generation size "ng-model = "generationSize">  </input> </li>
+
+    <li><button align = "center" style="margin-left:20px;"ng-click = "startAlgo()" class = "btn btn-primary"> Start </button></li>
+  </ul>
+  </div>
+
+  <ul class="nav nav-tabs">
+     <li><a ui-sref=".input" ui-sref-active="active">Input</a></li>
+     <li><a ui-sref=".results" ui-sref-active="active" ng-click = "drawGraph()">Results</a></li>
+     <li><a href="#">Menu 2</a></li>
+  </ul>
+
+  <div ui-view></div>
+
+  </div>
+
+</div>
