@@ -12,10 +12,9 @@
   </ul>
   </div>
 
-  <ul class="nav nav-tabs">
-     <li><a ui-sref=".input" ui-sref-active="active">Input</a></li>
-     <li><a ui-sref=".results" ui-sref-active="active" ng-click = "drawGraph()">Results</a></li>
-     <li><a href="#">Menu 2</a></li>
+  <ul class="nav nav-pills">
+     <li ui-sref-active="active"><a ui-sref=".input" >Input</a></li>
+     <li ui-sref-active="active"><a ui-sref=".results">Results</a></li>
   </ul>
 
   <div ui-view></div>
