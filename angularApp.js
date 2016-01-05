@@ -11,6 +11,8 @@ var gaApp = angular.module("gaApp",["ui.router"]);
 
 	var debtItems = [];
 
+	var results = [];
+
 	factory.getVariables = function(){
 					return variables;
 	}
@@ -19,6 +21,9 @@ var gaApp = angular.module("gaApp",["ui.router"]);
 					return debtItems;
 	}
 
+	factory.getResults = function(){
+					return results;
+	}
 	return factory;
 
 });
@@ -35,6 +40,8 @@ gaApp.controller("inputhandler",function($scope,variablesFactory,FileInputServic
     $scope.variables = variablesFactory.getVariables();
 
 		$scope.debtItems = variablesFactory.getDebtItems();
+
+		$scope.results = variablesFactory.getResults();
 
 		$scope.addNewDebtItem = function (){
 
@@ -55,9 +62,9 @@ gaApp.controller("inputhandler",function($scope,variablesFactory,FileInputServic
 
 		 		$scope.variables = variablesFactory.getVariables();
 
-	 			// start the algorithm
 
-	 			var lastGenerationData = geneticAlgorithm.init($scope.populationSize, $scope.generationSize,$scope.variables.length,$scope.variables);
+	 			// start the algorithm
+	 			var lastGenerationData = geneticAlgorithm.init($scope.populationSize, $scope.generationSize, $scope.variables, $scope.debtItems);
 
 				var dataSentToGraph = [];
 
@@ -81,13 +88,19 @@ gaApp.controller("inputhandler",function($scope,variablesFactory,FileInputServic
 
 				console.log(dataSentToGraph);
 
-				$scope.results = dataSentToGraph;
+				// if results are already available, then remove them and update with new results
+				if(	variablesFactory.getResults().length > 0){
+						variablesFactory.getResults().splice(0,variablesFactory.getResults().length);
+				}
 
-				draw($scope.results);
+				Array.prototype.push.apply(variablesFactory.getResults(), dataSentToGraph);
+
+				draw(dataSentToGraph);
   }
 
 	$scope.drawGraph = function (){
-					draw($scope.results);
+			if ($scope.results.length > 0)
+						draw($scope.results);
 	}
 
 	//read data from file
@@ -109,6 +122,24 @@ gaApp.controller("inputhandler",function($scope,variablesFactory,FileInputServic
 	console.log(fileData);
 
 });
+
+gaApp.directive('drawGraph', ['$timeout', function (timer) {
+return {
+		link: function (scope, elem, attrs, ctrl) {
+				var hello = function () {
+
+						scope.drawGraph();
+
+				}
+				//hello();
+				 timer(hello, 0);
+				/* Doesn't Work!
+				* Try:
+				// timer(hello, 0);
+				*/
+		}
+}
+}]);
 
 // service for loading file data asynchronously
 gaApp.service('FileInputService', function ($q) {
@@ -140,6 +171,21 @@ gaApp.service('FileInputService', function ($q) {
     };
 });
 
+// for redirecting to default state
+
+gaApp.run(['$rootScope', '$state',
+ function($rootScope, $state) {
+
+  $rootScope.$on('$stateChangeStart',
+    function(evt, to, params) {
+      if (to.redirectTo) {
+        evt.preventDefault();
+        $state.go(to.redirectTo, params)
+      }
+    }
+  );
+}]);
+
 // route the requests to appropriate views and controllers
 gaApp.config(function($stateProvider, $urlRouterProvider){
 
@@ -156,6 +202,7 @@ gaApp.config(function($stateProvider, $urlRouterProvider){
 				controller: 'inputhandler'
 		})
 		.state('tool', {
+				redirectTo: 'tool.input',
 				url: '/tool',
 				templateUrl: "tool.html",
 				controller: 'inputhandler'
