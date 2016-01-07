@@ -27,6 +27,7 @@ var geneticAlgorithm = (function geneticAlgorithm() {
         this.type = "";
         this.principal = 0;
         this.futureCost = 0;
+        this.dependencies = {};
 
     }
     ;
@@ -56,6 +57,9 @@ var geneticAlgorithm = (function geneticAlgorithm() {
               individualgene.satisfaction = Number(variable[ind].satisfaction);
               individualgene.type = "f";
 
+              if(!(variable[ind].dependencies === undefined))
+                individualgene.dependencies = variable[ind].dependencies.split(",");
+
             }else{
               individualgene.type = "d";
               individualgene.name = debtItems[debtIndex].debtItemName;
@@ -82,6 +86,17 @@ var geneticAlgorithm = (function geneticAlgorithm() {
 
       var totalCost = 0;
 
+      var assocArray = [];
+
+      //collect all the debt items to an associative Array
+      this.structure.forEach(function (f){
+        if(f.type === "d"){
+            assocArray[f.name] = f;
+        }
+
+      });
+
+
       for (var i in this.structure) {
 
           var gene = this.structure[i];
@@ -90,7 +105,23 @@ var geneticAlgorithm = (function geneticAlgorithm() {
 
               if(gene.type == "f"){
                 totalSTV = totalSTV + gene.satisfaction;
-                totalCost = totalCost + gene.cost;
+
+                  if(gene.dependencies.length > 0){
+                          var debtCost = 0;
+                          gene.dependencies.forEach(function (f){
+
+                            if(assocArray[f].value === 0){
+                                debtCost = debtCost + assocArray[f].futureCost * (0.5);
+                            }
+
+                          });
+
+                          totalCost = totalCost + gene.cost + debtCost ;
+
+                  }else{
+                    totalCost = totalCost + gene.cost;
+                  }
+
               }
               else if (gene.type == "d"){
                 totalFIV = totalFIV + gene.futureCost;
@@ -108,7 +139,7 @@ var geneticAlgorithm = (function geneticAlgorithm() {
       this.cost = totalSTV;
       this.satisfaction = totalFIV;
 
-      if (totalCost > 500){
+      if (totalCost > 450){
         this.shortTermValue = 0;
         this.futureInvestmentValue = 0;
 
@@ -167,7 +198,45 @@ var geneticAlgorithm = (function geneticAlgorithm() {
     }
     ;
 
-    Chromosome.prototype.Crossover = function(chromosome) {
+    function Crossover(parent1,parent2){
+
+      var crossoverpoint = Math.round(parent1.structure.length / 2) - 1;
+
+
+      var child1 = Object.create(parent1);
+      child1.cost = 0;
+      child1.satisfaction = 0;
+      child1.shortTermValue = 0;
+      child1.futureInvestmentValue = 0;
+
+      var child2 = Object.create(parent2);
+      child2.cost = 0;
+      child2.satisfaction = 0;
+      child2.shortTermValue = 0;
+      child2.futureInvestmentValue = 0;
+
+      child1.structure = parent1.structure.slice(0, crossoverpoint).concat(parent2.structure.slice(crossoverpoint, parent2.structure.length));
+
+      child2.structure = parent2.structure.slice(0, crossoverpoint).concat(parent1.structure.slice(crossoverpoint, parent1.structure.length));
+
+      child1.Fitness();
+      child2.Fitness();
+
+      checkChromosome(child1);
+      checkChromosome(child2);
+
+
+
+
+      printCromosome(child1);
+
+      printCromosome(child2);
+
+      return [child1, child2];
+
+    }
+
+  /*  Chromosome.prototype.Crossover = function(chromosome) {
 
         var crossoverpoint = Math.round(this.structure.length / 2) - 1;
 
@@ -177,13 +246,28 @@ var geneticAlgorithm = (function geneticAlgorithm() {
 
         printCromosome(chromosome);
 
-        var child1 = new Chromosome();
+        var child1 = Object.create(chromosome);
+        child1.cost = 0;
+        child1.satisfaction = 0;
+        child1.shortTermValue = 0;
+        child1.futureInvestmentValue = 0;
 
-        var child2 = new Chromosome();
+        var child2 = Object.create(chromosome);
+        child2.cost = 0;
+        child2.satisfaction = 0;
+        child2.shortTermValue = 0;
+        child2.futureInvestmentValue = 0;
 
         child1.structure = this.structure.slice(0, crossoverpoint).concat(chromosome.structure.slice(crossoverpoint, chromosome.structure.length));
 
         child2.structure = chromosome.structure.slice(0, crossoverpoint).concat(this.structure.slice(crossoverpoint, chromosome.structure.length));
+
+        child1.Fitness();
+        child2.Fitness();
+
+        checkChromosome(child1);
+        checkChromosome(child2);
+
 
         printCromosome(child1);
 
@@ -193,7 +277,7 @@ var geneticAlgorithm = (function geneticAlgorithm() {
 
 
     }
-    ;
+    ;*/
 
     function getRandomIntInclusive(min, max) {
         return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -446,6 +530,28 @@ var geneticAlgorithm = (function geneticAlgorithm() {
 
     }
 
+    function checkChromosome(chromosome){
+
+      var cost = 0;
+      chromosome.structure.forEach(function (f){
+                if(f.value)
+                    cost = cost + f.futureCost;
+
+      });
+
+      if(cost != chromosome.satisfaction){
+        console.log("<------------------possible error------------------>");
+        console.log("possible error"+chromosome.cost);
+        console.log("possible error"+chromosome.cost);
+        console.log("possible error"+chromosome.cost);
+        console.log("<------------------possible error------------------End>");
+      }
+
+
+
+
+    }
+
     Population.prototype.Evolve = function(generationNumber, populationSize) {
 
         while (generationNumber--) {
@@ -454,11 +560,7 @@ var geneticAlgorithm = (function geneticAlgorithm() {
 
             var parent2 = this.members[1];
 
-            var children = parent1.Crossover(parent2);
-
-            // calculate fitness of children
-            children[0].Fitness();
-            children[1].Fitness();
+            var children = Crossover(parent1,parent2);
 
             var mutate = false;
 
@@ -516,6 +618,8 @@ var geneticAlgorithm = (function geneticAlgorithm() {
 
             printCromosome(this.members);
 
+        //    this.members.sort();
+
             // if lastGeneration pass lastgeneration
             var nonDominatedSolutions = [];
 
@@ -528,6 +632,11 @@ var geneticAlgorithm = (function geneticAlgorithm() {
 
 
             this.members = nonDominatedSolutions;
+
+            // reevaluate fitnesses
+            this.members.forEach(function (f){
+              f.Fitness();
+            });
 
 
             /**Roulette wheel selection
