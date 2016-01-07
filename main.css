@@ -1,0 +1,223 @@
+.navbar {
+  margin-bottom: 0;
+  border-radius: 0;
+}
+
+/* Set height of the grid so .sidenav can be 100% (adjust as needed) */
+.row.content {height: 450px}
+
+/* Set gray background color and 100% height */
+.sidenav {
+  padding-top: 20px;
+  /*background-color: #f1f1f1;*/
+  height: 100%;
+}
+
+/* Set black background color, white text and some padding */
+footer {
+  background-color: #555;
+  color: white;
+  padding: 15px;
+}
+
+/* On small screens, set height to 'auto' for sidenav and grid */
+@media screen and (max-width: 767px) {
+  .sidenav {
+    height: auto;
+    padding: 15px;
+  }
+  .row.content {height:auto;}
+}
+
+#page-wrap { position: relative; z-index: 2; width: 800px; height: 600px; margin: 10px auto; padding: 10px; background: white; }
+p { font:15px/2 Georgia, Serif; margin: 0 0 30px 0; text-indent: 40px; }
+
+#page-wrap2 { position: relative; z-index: 2; width: 1200px; height: 900px; margin: 50px auto; padding: 40px;  }
+p { font: 15px/2 Georgia, Serif; margin: 0 0 30px 0; text-indent: 40px; }
+
+#image-wrap {
+    background: url(pietre_31.jpg) right bottom repeat, url(pietre_31.jpg) left top repeat;
+    padding: 5px;
+
+}
+
+.nav a {
+  color: #5a5a5a;
+  font-size: 11px;
+  font-weight: bold;
+  padding: 14px 10px;
+  text-transform: uppercase;
+}
+
+.nav li {
+  display: inline;
+}
+
+.jumbotron {
+  background-image:url('');
+  height: 1200px;
+
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.jumbotron .container {
+  position: relative;
+  top:100px;
+}
+
+.jumbotron h1 {
+  color: #fff;
+  font-size: 48px;
+  font-family: 'Shift', sans-serif;
+  font-weight: bold;
+}
+
+.jumbotron p {
+  font-size: 20px;
+  color: #fff;
+}
+
+.learn-more {
+  background-color: #f7f7f7;
+}
+
+.learn-more h3 {
+  font-family: 'Shift', sans-serif;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.learn-more a {
+  color: #00b0ff;
+}
+	.axis path {
+					fill:none;
+					stroke:black;
+			}
+
+			.axis {
+
+					font-size:8pt;
+					font-family:sans-serif;
+
+			}
+
+			.tick {
+				fill: none;
+				stroke:black;
+			}
+
+			circle{
+				stroke:black;
+				stroke-width:0.5px;
+				fill:RoyalBlue;
+				opacity:0.6;
+			}
+
+			path.cost_data{
+				stroke:red;
+				opacity:0.1;
+
+			}
+
+			div.chart{
+			 font-family:sans-serif;
+			 font-size:0.7em;
+			}
+
+			div.bar {
+			 background-color:DarkRed;
+			 color:white;
+			 height:3em;
+			 line-height:3em;
+			 padding-left:3em;
+			 padding-right:1em;
+			 margin-left:1px;
+			 margin-bottom:2px;
+			 text-align:center;
+			}
+
+			div.label {
+			 height:3em;
+			 line-height:3em;
+			 padding-right:1em;
+			 margin-bottom:2px;
+			 float:left;
+			 width:20em;
+			 text-align:left;
+			}
+
+/*
+ * 1. Avoid the IE 10-11 `min-height` bug.
+ * 2. Set `flex-shrink` to `0` to prevent some browsers from
+ *    letting these items shrink to smaller than their content's default
+ *    minimum size. See http://bit.ly/1Mn35US for details.
+ * 3. Use `%` instead of `vh` since `vh` is buggy in older mobile Safari.
+ */
+
+.HolyGrail {
+  display: flex;
+  height: 100%; /* 1, 3 */
+  flex-direction: column;
+}
+
+.HolyGrail-header{
+  flex: 0 0 7em; /* 2 */
+   background-color:lightblue;
+
+}
+
+.HolyGrail-footer {
+  flex: 0 0 5em; /* 2 */
+
+}
+
+
+.HolyGrail-body {
+  display: flex;
+  flex: 1 0 auto; /* 2 */
+  flex-direction: column;
+  padding: var(--space);
+
+}
+
+.HolyGrail-content {
+  margin-top: var(--space);
+
+}
+
+.HolyGrail-nav {
+  order: -1;
+  }
+
+.HolyGrail-nav,
+.HolyGrail-ads {
+  padding: 1em;
+  border-radius: 8px;
+  background: rgba(147, 128, 108, 0.1);
+
+}
+
+
+  .HolyGrail-body {
+    flex-direction: row;
+  }
+  .HolyGrail-content {
+    flex: 1;
+    padding: 0 var(--space-lg);
+    margin: 0;
+  }
+  .HolyGrail-nav, .HolyGrail-ads {
+    flex: 0 0 12em;
+  }
+
+.HolyGrail-nav{
+  flex: 0.5 0%;
+
+
+}
+
+.HolyGrail-ads{
+  flex: 0.4 0%;
+}

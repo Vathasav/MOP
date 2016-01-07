@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Decision Making</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="main.css" rel="stylesheet">
+</head>
+
+<!-- main page, add links to different sub-views -->
+<body ng-app = "gaApp">
+
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <div class="collapse navbar-collapse" id="myNavbar">
+      <ul class="nav navbar-nav">
+        <li><a ui-sref="home">Home</a></li>
+        <li><a ui-sref="about">About</a></li>
+        <li><a ui-sref="tool">Tool</a></li>
+        <li><a ui-sref="contact">Contact</a></li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div class="container">
+    <div ui-view></div>
+</div>
+
+
+
+
+<script  src = "http://d3js.org/d3.v3.js"></script>
+
+<!-- Angular -->
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.4/angular.min.js"></script>
+<!-- UI-Router -->
+<script src="http://angular-ui.github.io/ui-router/release/angular-ui-router.js"></script>
+
+<!-- genetic algorithm -->
+<script src = "geneticAlgo.js"></script>
+<!-- Graph Controller -->
+<script src = "graphControl.js"></script>
+<script src = "angularApp.js"></script>
+
+
+<!--<footer class="container-fluid text-center">
+  <p>Footer Text</p>
+</footer> -->
+</body>
+
+
+</html>

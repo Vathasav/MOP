@@ -1,0 +1,97 @@
+
+<div class="row content">
+
+
+    <div ng-controller="inputhandler">
+      <h2 align = "left">Enter requirements</h2>
+
+      <div class="choosefile">
+           <input type = "file" id = "file" name = "file" onchange="angular.element(this).scope().onFileUpload(this)"/>
+      </div>
+
+      <div class="col-sm-6 text-left">
+
+      <form style="margin-top:30px; margin-right:20px;">
+
+        <div class="col-xs-12">
+
+            <div ng-repeat = "variable in variables ">
+
+              <div class="col-xs-3">
+
+                <input type = "text" class = "form-control" placeholder="Name" ng-model = "variable.name">  </input>
+              </div>
+
+              <div class="col-xs-2">
+
+                <input type = "text" class = "form-control" placeholder="Cost "ng-model = "variable.cost">  </input>
+
+              </div>
+
+              <div class="col-xs-2">
+
+                <input type = "text" class = "form-control" placeholder="Value "ng-model = "variable.satisfaction">  </input>
+
+              </div>
+
+              <div class="col-xs-3">
+
+                <input type = "text" class = "form-control" placeholder="Dependencies" ng-model = "variable.dependencies">  </input>
+
+              </div>
+
+              <div class = "col-xs-2">
+                  <img src = "Delete-button.jpg" height="35" width="40" ng-click = "deleteVariable(variable)"> </img>
+            </div>
+            </div>
+
+          <button style="margin-top:10px;"ng-click = "addVariable(variables)"  class = "btn btn-primary"> Add new variable </button>
+        </div>
+
+      </form>
+    </div>
+
+    <div class="col-sm-6">
+
+      <form style="margin-top:30px; margin-right:20px;">
+
+        <div class="col-xs-12">
+
+            <div ng-repeat = "variable in debtItems ">
+
+              <div class="col-xs-4">
+
+                <input type = "text" class = "form-control" placeholder="Debt item name" ng-model = "variable.debtItemName">  </input>
+              </div>
+
+              <div class="col-xs-3">
+
+                <input type = "text" class = "form-control" placeholder="Debt item principal" ng-model = "variable.principal">  </input>
+
+              </div>
+
+              <div class="col-xs-3">
+
+                <input type = "text" class = "form-control" placeholder="Future cost" ng-model = "variable.futureCost">  </input>
+
+              </div>
+
+              <div class = "col-xs-2">
+                  <img src = "Delete-button.jpg" height="35" width="40" ng-click = "deleteDebtItem(variable)"> </img>
+            </div>
+
+
+            </div>
+
+          <button style="margin-top:10px;"ng-click = "addNewDebtItem()"  class = "btn btn-primary"> Add new debt item </button>
+        </div>
+
+      </form>
+
+    </div>
+
+</div>
+
+</div>
+
+</div>
