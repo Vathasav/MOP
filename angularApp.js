@@ -50,9 +50,44 @@ gaApp.controller("inputhandler",function($scope,variablesFactory,FileInputServic
 
 		$scope.addVariable = function(variables){
 
-				variablesFactory.getVariables().push({name:'', cost:'', satisfaction:''});
+				variablesFactory.getVariables().push({name:'', cost:'', satisfaction:'',dependencies:''});
 
 		}
+
+		$scope.deleteVariable = function(variable){
+
+			var index = 0;
+			var arrCopy =  variablesFactory.getVariables();
+
+			for(var i = 0; i < arrCopy.length; i++){
+					 if(arrCopy[i].name === variable.name){
+						       index = i;
+									 break;
+					 }
+
+			}
+
+			arrCopy.splice(index,1);
+
+		}
+
+		$scope.deleteDebtItem = function(variable){
+
+			var index = 0;
+			var arrCopy =  variablesFactory.getDebtItems();
+
+			for(var i = 0; i < arrCopy.length; i++){
+					 if(arrCopy[i].debtItemName === variable.debtItemName){
+									 index = i;
+									 break;
+					 }
+
+			}
+
+			arrCopy.splice(index,1);
+
+		}
+
 
     console.log("call the algorithm");
     console.log($scope.populationSize);
@@ -234,11 +269,14 @@ function loadDataIntoModel(data, fileContent, debtData){
 
 		fileContent.forEach(function(f){
 			var arrayOfString = f.split(" ");
-			if (arrayOfString[0] !== "")
-				data.push({name:arrayOfString[0],cost:arrayOfString[1],satisfaction:arrayOfString[2]});
+			if (arrayOfString[0] !== ""){
+					data.push({name:arrayOfString[0],cost:arrayOfString[1],satisfaction:arrayOfString[2],dependencies:arrayOfString[3]});
 
-				if(arrayOfString.length > 3)
-				debtData.push({debtItemName:arrayOfString[3],principal:arrayOfString[4],futureCost:arrayOfString[5]});
+			}
+
+
+				if(arrayOfString.length > 4)
+				debtData.push({debtItemName:arrayOfString[4],principal:arrayOfString[5],futureCost:arrayOfString[6]});
 	});
 
 }
