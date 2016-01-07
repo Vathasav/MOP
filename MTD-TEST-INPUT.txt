@@ -1,7 +1,7 @@
-Req1 25 50 Debt-1 40 60
-Req2 20 60 Debt-2 30 55
-Req3 45 90 Debt-3 40 85
-Req4 30 70 Debt-4 35 90
+Req1 25 50 Debt-1,Debt-2 Debt-1 40 60
+Req2 20 60 Debt-4 Debt-2 30 55
+Req3 45 90 Debt-1 Debt-3 40 85
+Req4 30 70 Debt-3 Debt-4 35 90
 Req5 15 50
 Req6 32 85
 Req7 45 90
