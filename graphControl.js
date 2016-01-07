@@ -1,4 +1,4 @@
-function drawBar(data){
+function drawBar(data, cost, duration){
 
 		var width = 280;
 		var height = 400;
@@ -21,6 +21,13 @@ function drawBar(data){
 			.attr("class","bar")
 			.style("width", function(d){ return 2000/20 + "px"})
 			.text(function (d){ return d});
+
+	d3.select("#STV")
+			.text("STV : "+cost);
+
+	d3.select("#FIV")
+					.text("FIV : "+duration);
+
 
 	}
 
@@ -138,14 +145,14 @@ function drawBar(data){
 
 	d3.select(".x.axis")
 		.append("text")
-			.text("Satisfaction")
+			.text("Future investment value")
 			.attr("x",(width/2) -margin)
 			.attr("y", margin/1.5);
 
 
 	d3.select(".y.axis")
 		.append("text")
-			.text("Cost ($)")
+			.text("Short term value")
 			.attr("transform", "rotate (-90, -43, 0) translate(-200)");
 
 
@@ -181,7 +188,7 @@ function drawBar(data){
 
 	    //d3.selectAll("div.line").remove();
 	    d3.select("#graphArea2").selectAll("div.line").remove();
-		drawBar(d.stories);
+			drawBar(d.stories, d.cost, d.duration);
 
 
 
