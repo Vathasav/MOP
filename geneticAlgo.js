@@ -12,8 +12,6 @@ var geneticAlgorithm = (function geneticAlgorithm() {
         this.cost = 0;
         this.structure = [];
         this.satisfaction = 0;
-        this.shortTermValue = 0;
-        this.futureInvestmentValue = 0;
 
     }
     ;
@@ -24,10 +22,6 @@ var geneticAlgorithm = (function geneticAlgorithm() {
         this.satisfaction = 0;
         this.value = 0;
         this.name = "";
-        this.type = "";
-        this.principal = 0;
-        this.futureCost = 0;
-        this.dependencies = {};
 
     }
     ;
@@ -39,34 +33,17 @@ var geneticAlgorithm = (function geneticAlgorithm() {
     }
     ;
 
-    Chromosome.prototype.AddGene = function(size, variable, debtItems) {
-
-
+    Chromosome.prototype.AddGene = function(size, variable) {
 
         // create chromsoome with given length and data
         var ind = 0;
-        var debtIndex = 0;
         while (size--) {
 
             var individualgene = new Gene();
             individualgene.Random();
-
-            if(ind < variable.length){
-              individualgene.cost = Number(variable[ind].cost);
-              individualgene.name = variable[ind].name;
-              individualgene.satisfaction = Number(variable[ind].satisfaction);
-              individualgene.type = "f";
-
-              if(!(variable[ind].dependencies === undefined))
-                individualgene.dependencies = variable[ind].dependencies.split(",");
-
-            }else{
-              individualgene.type = "d";
-              individualgene.name = debtItems[debtIndex].debtItemName;
-              individualgene.principal = Number(debtItems[debtIndex].principal);
-              individualgene.futureCost = Number(debtItems[debtIndex].futureCost);
-              debtIndex++;
-            }
+            individualgene.cost = Number(variable[ind].cost);
+            individualgene.name = variable[ind].name;
+            individualgene.satisfaction = Number(variable[ind].satisfaction);
 
             this.structure.push(individualgene);
             ind++;
@@ -80,74 +57,6 @@ var geneticAlgorithm = (function geneticAlgorithm() {
 
     Chromosome.prototype.Fitness = function() {
 
-      var totalSTV = 0;
-
-      var totalFIV = 0;
-
-      var totalCost = 0;
-
-      var assocArray = [];
-
-      //collect all the debt items to an associative Array
-      this.structure.forEach(function (f){
-        if(f.type === "d"){
-            assocArray[f.name] = f;
-        }
-
-      });
-
-
-      for (var i in this.structure) {
-
-          var gene = this.structure[i];
-
-          if (gene.value) {
-
-              if(gene.type == "f"){
-                totalSTV = totalSTV + gene.satisfaction;
-
-                  if(gene.dependencies.length > 0){
-                          var debtCost = 0;
-                          gene.dependencies.forEach(function (f){
-
-                            if(assocArray[f].value === 0){
-                                debtCost = debtCost + assocArray[f].futureCost * (0.5);
-                            }
-
-                          });
-
-                          totalCost = totalCost + gene.cost + debtCost ;
-
-                  }else{
-                    totalCost = totalCost + gene.cost;
-                  }
-
-              }
-              else if (gene.type == "d"){
-                totalFIV = totalFIV + gene.futureCost;
-                totalCost = totalCost + gene.principal;
-              }
-          }
-
-
-      }
-
-      this.shortTermValue = totalSTV;
-      this.futureInvestmentValue = totalFIV;
-
-      // temporary fix
-      this.cost = totalSTV;
-      this.satisfaction = totalFIV;
-
-      if (totalCost > 450){
-        this.shortTermValue = 0;
-        this.futureInvestmentValue = 0;
-
-        this.cost = 0;
-        this.satisfaction = 0;
-      }
-
-
         /*    var fitness = 0;
     for(var i in this.structure){
 
@@ -160,7 +69,7 @@ var geneticAlgorithm = (function geneticAlgorithm() {
 
    this.cost = fitness;
 
-
+	*/
 
 
         var totalSatisfaction = 0;
@@ -180,9 +89,9 @@ var geneticAlgorithm = (function geneticAlgorithm() {
         }
 
         this.cost = totalCost;
-        this.satisfaction = totalSatisfaction; */
-    };
-
+        this.satisfaction = totalSatisfaction;
+    }
+    ;
 
     Chromosome.prototype.Mutate = function() {
 
@@ -198,45 +107,7 @@ var geneticAlgorithm = (function geneticAlgorithm() {
     }
     ;
 
-    function Crossover(parent1,parent2){
-
-      var crossoverpoint = Math.round(parent1.structure.length / 2) - 1;
-
-
-      var child1 = Object.create(parent1);
-      child1.cost = 0;
-      child1.satisfaction = 0;
-      child1.shortTermValue = 0;
-      child1.futureInvestmentValue = 0;
-
-      var child2 = Object.create(parent2);
-      child2.cost = 0;
-      child2.satisfaction = 0;
-      child2.shortTermValue = 0;
-      child2.futureInvestmentValue = 0;
-
-      child1.structure = parent1.structure.slice(0, crossoverpoint).concat(parent2.structure.slice(crossoverpoint, parent2.structure.length));
-
-      child2.structure = parent2.structure.slice(0, crossoverpoint).concat(parent1.structure.slice(crossoverpoint, parent1.structure.length));
-
-      child1.Fitness();
-      child2.Fitness();
-
-      checkChromosome(child1);
-      checkChromosome(child2);
-
-
-
-
-      printCromosome(child1);
-
-      printCromosome(child2);
-
-      return [child1, child2];
-
-    }
-
-  /*  Chromosome.prototype.Crossover = function(chromosome) {
+    Chromosome.prototype.Crossover = function(chromosome) {
 
         var crossoverpoint = Math.round(this.structure.length / 2) - 1;
 
@@ -246,28 +117,13 @@ var geneticAlgorithm = (function geneticAlgorithm() {
 
         printCromosome(chromosome);
 
-        var child1 = Object.create(chromosome);
-        child1.cost = 0;
-        child1.satisfaction = 0;
-        child1.shortTermValue = 0;
-        child1.futureInvestmentValue = 0;
+        var child1 = new Chromosome();
 
-        var child2 = Object.create(chromosome);
-        child2.cost = 0;
-        child2.satisfaction = 0;
-        child2.shortTermValue = 0;
-        child2.futureInvestmentValue = 0;
+        var child2 = new Chromosome();
 
         child1.structure = this.structure.slice(0, crossoverpoint).concat(chromosome.structure.slice(crossoverpoint, chromosome.structure.length));
 
         child2.structure = chromosome.structure.slice(0, crossoverpoint).concat(this.structure.slice(crossoverpoint, chromosome.structure.length));
-
-        child1.Fitness();
-        child2.Fitness();
-
-        checkChromosome(child1);
-        checkChromosome(child2);
-
 
         printCromosome(child1);
 
@@ -277,7 +133,7 @@ var geneticAlgorithm = (function geneticAlgorithm() {
 
 
     }
-    ;*/
+    ;
 
     function getRandomIntInclusive(min, max) {
         return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -291,21 +147,21 @@ var geneticAlgorithm = (function geneticAlgorithm() {
             var suffix = "userstory";
             var index = 0;
             var sol = [];
-            //var cost = 0;
-            //var satisfaction = 0;
+            var cost = 0;
+            var satisfaction = 0;
 
             chromosome.structure.forEach(function(f) {
                 index++;
 
                 if (f.value == 1) {
                     sol.push(f.name);
-                    //cost = cost + f.cost;
-                    //satisfaction = satisfaction + f.satisfaction;
+                    cost = cost + f.cost;
+                    satisfaction = satisfaction + f.satisfaction;
                 }
 
             });
 
-            return [sol, (chromosome.cost), chromosome.satisfaction];
+            return [sol, (cost), -satisfaction];
         }
 
     }
@@ -341,7 +197,7 @@ var geneticAlgorithm = (function geneticAlgorithm() {
 
 
 
-    var Population = function(size, chromosomeLength, variables, debtItems) {
+    var Population = function(size, chromosomeLength, variables) {
 
         this.members = [];
 
@@ -349,11 +205,12 @@ var geneticAlgorithm = (function geneticAlgorithm() {
 
         while (size--) {
             var chromosome = new Chromosome();
-            chromosome.AddGene(chromosomeLength, variables, debtItems);
+            chromosome.AddGene(chromosomeLength, variables);
 
             this.members.push(chromosome);
 
         }
+
 
     }
     ;
@@ -372,6 +229,7 @@ var geneticAlgorithm = (function geneticAlgorithm() {
     Population.prototype.NonDominatedSort = function(populationSize) {
 
         var selectedIndividuals = [];
+        var remainingIndividuals = [];
         var lastGeneration = false;
 
         if(arguments.length > 1)
@@ -383,9 +241,9 @@ var geneticAlgorithm = (function geneticAlgorithm() {
                 return -1;
             else if (a.satisfaction == b.satisfaction){
                     if(a.cost > b.cost)
-                        return -1;
-                    else
                         return 1;
+                    else
+                        return -1;
             }
             else if(a.satisfaction < b.satisfaction)
               return 1;
@@ -393,9 +251,6 @@ var geneticAlgorithm = (function geneticAlgorithm() {
         });
 
         printCromosome(this.members);
-
-        // initialize for every iteration
-        var remainingIndividuals = [];
 
 //        console.log(this.members);
 
@@ -412,9 +267,8 @@ var geneticAlgorithm = (function geneticAlgorithm() {
 
             for (var j = 0; j < this.members.length; j++) {
 
-                if ((this.members[j].cost > highCost && this.members[j].satisfaction >= bestSatisfaction) ) {
+                if ((this.members[j].cost < highCost && this.members[j].satisfaction >= bestSatisfaction) ) {
                     toInclude = false;
-                    break;
 
                 }
 
@@ -432,7 +286,6 @@ var geneticAlgorithm = (function geneticAlgorithm() {
 
         this.members.splice(0,this.members.length);
         Array.prototype.push.apply(this.members, remainingIndividuals);
-
 
         printCromosome(selectedIndividuals);
 
@@ -530,28 +383,6 @@ var geneticAlgorithm = (function geneticAlgorithm() {
 
     }
 
-    function checkChromosome(chromosome){
-
-      var cost = 0;
-      chromosome.structure.forEach(function (f){
-                if(f.value)
-                    cost = cost + f.futureCost;
-
-      });
-
-      if(cost != chromosome.satisfaction){
-        console.log("<------------------possible error------------------>");
-        console.log("possible error"+chromosome.cost);
-        console.log("possible error"+chromosome.cost);
-        console.log("possible error"+chromosome.cost);
-        console.log("<------------------possible error------------------End>");
-      }
-
-
-
-
-    }
-
     Population.prototype.Evolve = function(generationNumber, populationSize) {
 
         while (generationNumber--) {
@@ -560,7 +391,11 @@ var geneticAlgorithm = (function geneticAlgorithm() {
 
             var parent2 = this.members[1];
 
-            var children = Crossover(parent1,parent2);
+            var children = parent1.Crossover(parent2);
+
+            // calculate fitness of children
+            children[0].Fitness();
+            children[1].Fitness();
 
             var mutate = false;
 
@@ -618,8 +453,6 @@ var geneticAlgorithm = (function geneticAlgorithm() {
 
             printCromosome(this.members);
 
-        //    this.members.sort();
-
             // if lastGeneration pass lastgeneration
             var nonDominatedSolutions = [];
 
@@ -632,11 +465,6 @@ var geneticAlgorithm = (function geneticAlgorithm() {
 
 
             this.members = nonDominatedSolutions;
-
-            // reevaluate fitnesses
-            this.members.forEach(function (f){
-              f.Fitness();
-            });
 
 
             /**Roulette wheel selection
@@ -738,15 +566,16 @@ var geneticAlgorithm = (function geneticAlgorithm() {
     }
     ;
 
-    function init(populationSize, generationSize, variables, debtItems) {
+    function init(populationSize, generationSize, variables) {
 
         //set GA settings
 
-        var chromosomeSize = variables.length + debtItems.length;
 
         //initialize population and start the algorithm
 
-        var pop = new Population(populationSize,chromosomeSize,variables, debtItems);
+        var chromosomeSize = variables.length;
+
+        var pop = new Population(populationSize,chromosomeSize,variables);
         pop.ReadyInitialPopulation();
 
         return pop.Evolve(generationSize, populationSize);

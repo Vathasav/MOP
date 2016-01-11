@@ -9,16 +9,10 @@ var gaApp = angular.module("gaApp",["ui.router"]);
 
 	var variables = [];
 
-	var debtItems = [];
-
 	var results = [];
 
 	factory.getVariables = function(){
 					return variables;
-	}
-
-	factory.getDebtItems = function(){
-					return debtItems;
 	}
 
 	factory.getResults = function(){
@@ -39,14 +33,7 @@ gaApp.controller("inputhandler",function($scope,variablesFactory,FileInputServic
 		*/
     $scope.variables = variablesFactory.getVariables();
 
-		$scope.debtItems = variablesFactory.getDebtItems();
-
 		$scope.results = variablesFactory.getResults();
-
-		$scope.addNewDebtItem = function (){
-
-				variablesFactory.getDebtItems().push({debtItemName:'', principal:'', futureCost:''});
-		}
 
 		$scope.addVariable = function(variables){
 
@@ -71,24 +58,6 @@ gaApp.controller("inputhandler",function($scope,variablesFactory,FileInputServic
 
 		}
 
-		$scope.deleteDebtItem = function(variable){
-
-			var index = 0;
-			var arrCopy =  variablesFactory.getDebtItems();
-
-			for(var i = 0; i < arrCopy.length; i++){
-					 if(arrCopy[i].debtItemName === variable.debtItemName){
-									 index = i;
-									 break;
-					 }
-
-			}
-
-			arrCopy.splice(index,1);
-
-		}
-
-
     console.log("call the algorithm");
     console.log($scope.populationSize);
 
@@ -99,7 +68,7 @@ gaApp.controller("inputhandler",function($scope,variablesFactory,FileInputServic
 
 
 	 			// start the algorithm
-	 			var lastGenerationData = geneticAlgorithm.init($scope.populationSize, $scope.generationSize, $scope.variables, $scope.debtItems);
+	 			var lastGenerationData = geneticAlgorithm.init($scope.populationSize, $scope.generationSize, $scope.variables);
 
 				var dataSentToGraph = [];
 
@@ -270,13 +239,10 @@ function loadDataIntoModel(data, fileContent, debtData){
 		fileContent.forEach(function(f){
 			var arrayOfString = f.split(" ");
 			if (arrayOfString[0] !== ""){
-					data.push({name:arrayOfString[0],cost:arrayOfString[1],satisfaction:arrayOfString[2],dependencies:arrayOfString[3]});
+					data.push({name:arrayOfString[0],cost:arrayOfString[1],satisfaction:arrayOfString[2]});
 
 			}
 
-
-				if(arrayOfString.length > 4)
-				debtData.push({debtItemName:arrayOfString[4],principal:arrayOfString[5],futureCost:arrayOfString[6]});
 	});
 
 }

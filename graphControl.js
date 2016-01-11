@@ -23,10 +23,10 @@ function drawBar(data, cost, duration){
 			.text(function (d){ return d});
 
 	d3.select("#STV")
-			.text("STV : "+cost);
+			.text("Cost : "+cost);
 
 	d3.select("#FIV")
-					.text("FIV : "+duration);
+					.text("Satisfaction : "+ (-1)*duration);
 
 
 	}
@@ -145,14 +145,14 @@ function drawBar(data, cost, duration){
 
 	d3.select(".x.axis")
 		.append("text")
-			.text("Future investment value")
+			.text("Customer satisfaction")
 			.attr("x",(width/2) -margin)
 			.attr("y", margin/1.5);
 
 
 	d3.select(".y.axis")
 		.append("text")
-			.text("Short term value")
+			.text("Cost")
 			.attr("transform", "rotate (-90, -43, 0) translate(-200)");
 
 
