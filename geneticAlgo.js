@@ -387,17 +387,9 @@ var geneticAlgorithm = (function geneticAlgorithm() {
 
         while (generationNumber--) {
 
-            var parent1 = this.members[0];
-
-            var parent2 = this.members[1];
-
-            var children = parent1.Crossover(parent2);
-
-            // calculate fitness of children
-            children[0].Fitness();
-            children[1].Fitness();
-
             var mutate = false;
+
+            var individualsToCrossover = [];
 
             var keepOldChromosomes = [];
 
@@ -415,37 +407,66 @@ var geneticAlgorithm = (function geneticAlgorithm() {
                 var probability = getRandomIntInclusive(1, 100);
 
                 // mutation probability 70%, crossover probability 30%
-                if (probability > 30)
+                if (probability > 30){
                     mutate = true;
+                }else{
+                   individualsToCrossover.push(chromosome);
+                }
 
                 if (mutate) {
 
                     chromosome.Mutate();
 
+                    chromosome.Fitness();
+
+                    //var newfitness = chromosome.cost;
+
+                    var newCost = chromosome.cost;
+                    var newSatisfaction = chromosome.satisfaction;
+
+                    // check if the mutated chromosome is better or not
+
+                    //if(oldFitness > newfitness){
+                    //    keepOldChromosomes.push(oldChromosome);
+                    //}
+
+                    if (newCost > oldChromosome.cost && newSatisfaction < oldChromosome.satisfaction) {
+                        keepOldChromosomes.push(oldChromosome);
+                    }
+
+
 
                 }
 
-                chromosome.Fitness();
-
-                //var newfitness = chromosome.cost;
-
-                var newCost = chromosome.cost;
-                var newSatisfaction = chromosome.satisfaction;
-
-                // check if the mutated chromosome is better or not
-
-                //if(oldFitness > newfitness){
-                //    keepOldChromosomes.push(oldChromosome);
-                //}
-
-                if (newCost > oldChromosome.cost && newSatisfaction < oldChromosome.satisfaction) {
-                    keepOldChromosomes.push(oldChromosome);
-                }
 
             }
 
-            this.members.push(children[0]);
-            this.members.push(children[1]);
+            // perform crossover between individuals
+            // add them to the total population
+
+            var index = 0;
+
+            var childChromosomes = [];
+
+            while (index < individualsToCrossover.length){
+
+              var parent1 = individualsToCrossover[index];
+
+              var parent2 = individualsToCrossover[index++];
+
+              var children = parent1.Crossover(parent2);
+
+              // calculate fitness of children
+              children[0].Fitness();
+              children[1].Fitness();
+
+              childChromosomes.push(children[0]);
+              childChromosomes.push(children[1]);
+
+
+            }
+
+            Array.prototype.push.apply(this.members, childChromosomes);
 
             Array.prototype.push.apply(this.members, keepOldChromosomes);
 
