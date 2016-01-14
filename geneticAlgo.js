@@ -139,7 +139,7 @@ var geneticAlgorithm = (function geneticAlgorithm() {
       this.cost = totalSTV;
       this.satisfaction = totalFIV;
 
-      if (totalCost > 450){
+      if (totalCost > 350){
         this.shortTermValue = 0;
         this.futureInvestmentValue = 0;
 
@@ -378,6 +378,28 @@ var geneticAlgorithm = (function geneticAlgorithm() {
             lastGeneration = true;
 
         do{
+
+          var assocArray = [];
+          var removeElementsIndex = [];
+          var remainingElements = [];
+          // remove duplicate individuals
+          var index = 0;
+          this.members.forEach(function (f){
+            if(assocArray.length > 0 && assocArray[f.cost] === f.satisfaction){
+              //duplicate member
+              removeElementsIndex.push(index);
+              index++;
+            }else{
+              assocArray[f.cost] = f.satisfaction;
+              remainingElements.push(f);
+              index++;
+            }
+
+          });
+
+        this.members = remainingElements;
+
+
         this.members.sort(function(a, b) {
             if (a.satisfaction > b.satisfaction)
                 return -1;
@@ -410,13 +432,18 @@ var geneticAlgorithm = (function geneticAlgorithm() {
             var bestSatisfaction = this.members[i].satisfaction;
             var toInclude = true;
 
-            for (var j = 0; j < this.members.length; j++) {
+            for (var j = 0; j < this.members.length ; j++) {
 
-                if ((this.members[j].cost > highCost && this.members[j].satisfaction >= bestSatisfaction) ) {
+              if( j !== i){
+
+                if ((this.members[j].cost >= highCost && this.members[j].satisfaction >= bestSatisfaction) ) {
+
                     toInclude = false;
                     break;
 
                 }
+
+              }
 
             }
 
@@ -436,10 +463,10 @@ var geneticAlgorithm = (function geneticAlgorithm() {
 
         printCromosome(selectedIndividuals);
 
-        if(lastGeneration == true)
+        if(lastGeneration == true )
              return selectedIndividuals;
 
-        }while (selectedIndividuals.length < populationSize);
+        }while (selectedIndividuals.length < populationSize && remainingIndividuals.length != 0);
 
     return selectedIndividuals;
 
@@ -554,19 +581,15 @@ var geneticAlgorithm = (function geneticAlgorithm() {
 
     Population.prototype.Evolve = function(generationNumber, populationSize) {
 
-        while (generationNumber--) {
-
-            var parent1 = this.members[0];
-
-            var parent2 = this.members[1];
-
-            var children = Crossover(parent1,parent2);
+      while (generationNumber--) {
 
             var mutate = false;
 
+            var individualsToCrossover = [];
+
             var keepOldChromosomes = [];
 
-            for (var i = 2; i < this.members.length; i++) {
+            for (var i = 0; i < this.members.length; i++) {
 
                 var chromosome = this.members[i];
 
@@ -580,37 +603,72 @@ var geneticAlgorithm = (function geneticAlgorithm() {
                 var probability = getRandomIntInclusive(1, 100);
 
                 // mutation probability 70%, crossover probability 30%
-                if (probability > 30)
+                if (probability > 30){
                     mutate = true;
+                }else{
+                   individualsToCrossover.push(chromosome);
+                   mutate = false;
+                }
 
                 if (mutate) {
 
                     chromosome.Mutate();
 
+                    chromosome.Fitness();
+
+                    //var newfitness = chromosome.cost;
+
+                    var newCost = chromosome.cost;
+                    var newSatisfaction = chromosome.satisfaction;
+
+                    // check if the mutated chromosome is better or not
+
+                    //if(oldFitness > newfitness){
+                    //    keepOldChromosomes.push(oldChromosome);
+                    //}
+
+                    if (newCost > oldChromosome.cost && newSatisfaction < oldChromosome.satisfaction) {
+                        keepOldChromosomes.push(oldChromosome);
+                    }
+
+
 
                 }
 
-                chromosome.Fitness();
-
-                //var newfitness = chromosome.cost;
-
-                var newCost = chromosome.cost;
-                var newSatisfaction = chromosome.satisfaction;
-
-                // check if the mutated chromosome is better or not
-
-                //if(oldFitness > newfitness){
-                //    keepOldChromosomes.push(oldChromosome);
-                //}
-
-                if (newCost > oldChromosome.cost && newSatisfaction < oldChromosome.satisfaction) {
-                    keepOldChromosomes.push(oldChromosome);
-                }
 
             }
 
-            this.members.push(children[0]);
-            this.members.push(children[1]);
+            // perform crossover between individuals
+            // add them to the total population
+
+            var index = 0;
+
+            var childChromosomes = [];
+
+            while (index < individualsToCrossover.length){
+
+              var parent1 = individualsToCrossover[index];
+
+              var parent2 = individualsToCrossover[index++];
+
+              var children = Crossover(parent1,parent2);
+
+              // calculate fitness of children
+              children[0].Fitness();
+              children[1].Fitness();
+
+              childChromosomes.push(children[0]);
+              childChromosomes.push(children[1]);
+
+
+            }
+
+            // reevaluate fitnesses
+            childChromosomes.forEach(function (f){
+              f.Fitness();
+            });
+
+            Array.prototype.push.apply(this.members, childChromosomes);
 
             Array.prototype.push.apply(this.members, keepOldChromosomes);
 
@@ -633,10 +691,7 @@ var geneticAlgorithm = (function geneticAlgorithm() {
 
             this.members = nonDominatedSolutions;
 
-            // reevaluate fitnesses
-            this.members.forEach(function (f){
-              f.Fitness();
-            });
+
 
 
             /**Roulette wheel selection
