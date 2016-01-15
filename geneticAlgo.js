@@ -139,11 +139,9 @@ var geneticAlgorithm = (function geneticAlgorithm() {
       this.cost = totalSTV;
       this.satisfaction = totalFIV;
 
-<<<<<<< HEAD
-      if (totalCost > 450){
-=======
+
       if (totalCost > 350){
->>>>>>> master
+
         this.shortTermValue = 0;
         this.futureInvestmentValue = 0;
 
