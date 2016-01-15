@@ -76,7 +76,7 @@ function drawBar(data, cost, duration){
 
 
 
-	var margin = 55,
+	var margin = 80,
 		width = 600,
 		height = 550;
 
@@ -147,13 +147,24 @@ function drawBar(data, cost, duration){
 		.append("text")
 			.text("Future investment value")
 			.attr("x",(width/2) -margin)
-			.attr("y", margin/1.5);
+			.attr("y", margin/1.5)
+			.classed("graphStyle",true);
 
 
-	d3.select(".y.axis")
-		.append("text")
-			.text("Short term value")
-			.attr("transform", "rotate (-90, -43, 0) translate(-200)");
+			d3.select(".y.axis")
+							.append("text")
+								.text("Short term value")
+								.attr("transform", "rotate (-90, -45, 0) translate(-400)")
+								.classed("graphStyle",true);;
+
+/*			d3.select(".y.axis")
+				.append("text")
+					.text("Short term value")
+					.attr("transform", "rotate (-90, -35, 0) translate(-200)")
+					.attr("dy","5em");
+
+*/
+
 
 
 /*	// create lines between the circles
