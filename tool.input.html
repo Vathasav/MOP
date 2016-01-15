@@ -3,7 +3,11 @@
 
 
     <div ng-controller="inputhandler">
+
       <h2 align = "left">Enter requirements</h2>
+
+      <h2 align = "center"> Enter available features and techincal debt data</h2> <br>
+
 
       <div class="choosefile">
            <input type = "file" id = "file" name = "file" onchange="angular.element(this).scope().onFileUpload(this)"/>
@@ -11,7 +15,65 @@
 
       <div class="col-sm-6 text-left">
 
+
       <form style="margin-top:30px; margin-right:20px;">
+
+        <table ng-show = "variables.length" >
+
+         <thead>
+
+           <div class="col-xs-12">
+
+             <tr>
+               <div class="col-xs-3">
+                 <th>Name </th>
+               </div>
+               <div class="col-xs-2">
+                 <th>Cost </th>
+              </div>
+              <div class="col-xs-2">
+                 <th>Value</th>
+              </div>
+              <div class = "col-xs-3">
+                 <th>Dependencies</th>
+              </div>
+             </tr>
+
+           </div>
+         </thead>
+
+
+         <tbody>
+           <tr ng-repeat = "variable in variables">
+             <td>
+               <input type = "text" class = "form-control" placeholder="Name" ng-model = "variable.name">  </input>
+             </td>
+
+             <td>
+                 <input type = "text" class = "form-control" placeholder="Cost "ng-model = "variable.cost">  </input>
+             </td>
+
+             <td>
+                 <input type = "text" class = "form-control" placeholder="Value "ng-model = "variable.satisfaction">  </input>
+             </td>
+
+             <td>
+                <input type = "text" class = "form-control" placeholder="Dependencies" ng-model = "variable.dependencies">  </input>
+             </td>
+
+              <td>
+                <img src = "Delete-button.jpg" height="35" width="40" ng-click = "deleteVariable(variable)"> </img>
+             </td>
+
+           </tr>
+         </tbody>
+     </table>
+
+     <button style="margin-top:10px;"ng-click = "addVariable(variables)"  class = "btn btn-primary"> Add new variable </button>
+
+<!-- old UI -------------------------------------------------------------------------->
+  <!--    <form style="margin-top:30px; margin-right:20px;">
+>>>>>>> master
 
         <div class="col-xs-12">
 
@@ -48,12 +110,67 @@
           <button style="margin-top:10px;"ng-click = "addVariable(variables)"  class = "btn btn-primary"> Add new variable </button>
         </div>
 
+<<<<<<< HEAD
       </form>
+=======
+      </form> -->
+
     </div>
 
     <div class="col-sm-6">
 
+
       <form style="margin-top:30px; margin-right:20px;">
+
+      <table ng-show = "debtItems.length" >
+
+       <thead>
+
+         <div class="col-xs-12">
+
+           <tr>
+             <div class="col-xs-4">
+               <th>Debt item </th>
+             </div>
+             <div class="col-xs-3">
+               <th>Principal </th>
+            </div>
+            <div class="col-xs-3">
+               <th>Future Cost</th>
+            </div>
+            </tr>
+
+         </div>
+       </thead>
+
+
+       <tbody>
+         <tr ng-repeat = "variable in debtItems">
+           <td>
+            <input type = "text" class = "form-control" placeholder="Debt item name" ng-model = "variable.debtItemName">  </input>
+           </td>
+
+           <td>
+                <input type = "text" class = "form-control" placeholder="Debt item principal" ng-model = "variable.principal">  </input>
+           </td>
+
+           <td>
+                <input type = "text" class = "form-control" placeholder="Future cost" ng-model = "variable.futureCost">  </input>
+           </td>
+
+            <td>
+              <img src = "Delete-button.jpg" height="35" width="40" ng-click = "deleteDebtItem(variable)"> </img>
+           </td>
+
+         </tr>
+       </tbody>
+   </table>
+
+   <button style="margin-top:10px;"ng-click = "addNewDebtItem()"  class = "btn btn-primary"> Add new debt item </button>
+
+<!-- old UI -------------------------------------------------------------------------->
+  <!--    <form style="margin-top:30px; margin-right:20px;">
+>>>>>>> master
 
         <div class="col-xs-12">
 
@@ -86,7 +203,11 @@
           <button style="margin-top:10px;"ng-click = "addNewDebtItem()"  class = "btn btn-primary"> Add new debt item </button>
         </div>
 
+<<<<<<< HEAD
       </form>
+=======
+      </form> -->
+
 
     </div>
 

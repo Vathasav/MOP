@@ -97,6 +97,13 @@ gaApp.controller("inputhandler",function($scope,variablesFactory,FileInputServic
 
 		 		$scope.variables = variablesFactory.getVariables();
 
+<<<<<<< HEAD
+=======
+				//temporary fix -ad-hoc way
+
+				$scope.populationSize = 50;
+				$scope.generationSize = 20;
+>>>>>>> master
 
 	 			// start the algorithm
 	 			var lastGenerationData = geneticAlgorithm.init($scope.populationSize, $scope.generationSize, $scope.variables, $scope.debtItems);
