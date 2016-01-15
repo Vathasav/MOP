@@ -149,7 +149,8 @@ function drawBar(data, cost, duration){
 		.append("text")
 			.text("Future investment value")
 			.attr("x",(width/2) -margin)
-			.attr("y", margin/1.5);
+			.attr("y", margin/1.5)
+			.classed("graphStyle",true);
 
 
 
@@ -157,7 +158,7 @@ function drawBar(data, cost, duration){
 							.append("text")
 								.text("Short term value")
 								.attr("transform", "rotate (-90, -45, 0) translate(-400)")
-								.classed("graphStyle",true);;
+								.classed("graphStyle",true);
 
 /*			d3.select(".y.axis")
 				.append("text")
