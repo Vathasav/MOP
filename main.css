@@ -127,16 +127,30 @@ p { font: 15px/2 Georgia, Serif; margin: 0 0 30px 0; text-indent: 40px; }
 			}
 
 			div.bar {
-			 background-color:DarkRed;
-			 color:white;
-			 height:3em;
-			 line-height:3em;
-			 padding-left:3em;
-			 padding-right:1em;
-			 margin-left:1px;
-			 margin-bottom:2px;
-			 text-align:center;
+        border-radius: 25px;
+        border: 2px solid #73AD21;
+        height:3em;
+       	line-height:3em;
+       	padding-left:3em;
+       	padding-right:1em;
+       	margin-left:1px;
+       	margin-bottom:2px;
+			  text-align:center;
+        text-transform:uppercase;
 			}
+
+      div.roundedrect {
+        border-radius: 25px;
+        border: 2px solid #808080;
+        height:3em;
+       	line-height:3em;
+       	padding-left:3em;
+       	padding-right:1em;
+       	margin-left:1px;
+       	margin-bottom:2px;
+        text-align:center;
+        text-transform:uppercase;
+      }
 
 			div.label {
 			 height:3em;

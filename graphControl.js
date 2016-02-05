@@ -4,14 +4,18 @@ function drawBar(data, cost, duration){
 		var height = 400;
 		var margin = 70;
 
+		//separate requirements and debt items
+		var separatedData = separateDebtItems(data);
+		var userStories = separatedData[0];
+		var debtItems = separatedData[1];
 
 
-
+// draw usere stories
 	d3.select("#graphArea2")
 		.append("div")
 			.attr("class","chart")
 		.selectAll("div.line")
-		.data(data)
+		.data(userStories)
 		.enter()
 		.append("div")
 			.attr("class","line");
@@ -22,12 +26,48 @@ function drawBar(data, cost, duration){
 			.style("width", function(d){ return 2000/20 + "px"})
 			.text(function (d){ return d});
 
+	// draw debt items
+	d3.select("#graphArea3")
+		.append("div")
+			.attr("class","chart")
+		.selectAll("div.items")
+		.data(debtItems)
+		.enter()
+		.append("div")
+			.attr("class","items");
+
+	d3.selectAll("div.items")
+				.append("div")
+					.attr("class","roundedrect")
+					.style("width", function(d){ return 2000/20 + "px"})
+					.text(function (d){ return d});
+
+
+
 	d3.select("#STV")
 			.text("STV : "+cost);
 
 	d3.select("#FIV")
 					.text("FIV : "+duration);
 
+
+	}
+
+	function separateDebtItems(data){
+		var userStories = [];
+		var debtItems = [];
+
+		data.forEach(function (f){
+
+			if(f.startsWith('Req'))
+					userStories.push(f);
+			else {
+					debtItems.push(f);
+			}
+
+		});
+
+		return [userStories, debtItems];
 
 	}
 
@@ -197,8 +237,10 @@ function drawBar(data, cost, duration){
 
 			 console.log(d.cost);
 
+			 // remove existing solutions before re-drawing
 	    //d3.selectAll("div.line").remove();
 	    d3.select("#graphArea2").selectAll("div.line").remove();
+			d3.select("#graphArea3").selectAll("div.items").remove();
 			drawBar(d.stories, d.cost, d.duration);
 
 
