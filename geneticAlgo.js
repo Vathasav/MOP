@@ -1,9 +1,9 @@
 //"use strict";
 var geneticAlgorithm = (function geneticAlgorithm() {
-	
+
 	//store non-dominated individuals
 	var storeNonDominatedIndividuals = [];
-	var generationNumber = 0;
+	var generationCount = 1;
 
 
 
@@ -154,35 +154,35 @@ var geneticAlgorithm = (function geneticAlgorithm() {
 
 		/*    var fitness = 0;
 		    for(var i in this.structure){
-		
+
 		        var gene = this.structure[i];
-		
+
 		        if(gene.value)
 		            fitness = fitness + 5*(gene.satisfaction)-4*(gene.cost);
-		
+
 		    }
-		
+
 		   this.cost = fitness;
-		
-		
-		
-		
+
+
+
+
 		        var totalSatisfaction = 0;
-		
+
 		        var totalCost = 0;
 		        for (var i in this.structure) {
-		
+
 		            var gene = this.structure[i];
-		
+
 		            if (gene.value) {
 		                totalCost = totalCost + gene.cost;
 		                totalSatisfaction = totalSatisfaction + gene.satisfaction;
-		
+
 		            }
-		
-		
+
+
 		        }
-		
+
 		        this.cost = totalCost;
 		        this.satisfaction = totalSatisfaction; */
 	};
@@ -423,70 +423,130 @@ var geneticAlgorithm = (function geneticAlgorithm() {
 			// initialize for every iteration
 			var remainingIndividuals = [];
 
+
+//			var returnedArray = selectParetoIndividuals(this.members);
+
+//			selectedIndividuals = returnedArray[0];
+
+//			// initialize for every iteration
+//			var remainingIndividuals = returnedArray[1];
+
+
 //			console.log(this.members);
 
 
-//select individuals
 
 
 
-for (var i = 0; i < this.members.length; i++) {
 
-	var highCost = this.members[i].cost;
-	var bestSatisfaction = this.members[i].satisfaction;
-	var toInclude = true;
+			for (var i = 0; i < this.members.length; i++) {
 
-	for (var j = 0; j < this.members.length ; j++) {
+				var highCost = this.members[i].cost;
+				var bestSatisfaction = this.members[i].satisfaction;
+				var toInclude = true;
 
-		if( j !== i){
+				for (var j = 0; j < this.members.length ; j++) {
 
-			if ((this.members[j].cost >= highCost && this.members[j].satisfaction >= bestSatisfaction) ) {
+					if( j !== i){
 
-				toInclude = false;
-				break;
+						if ((this.members[j].cost >= highCost && this.members[j].satisfaction >= bestSatisfaction) ) {
+
+							toInclude = false;
+							break;
+
+						}
+
+					}
+
+				}
+
+				if (toInclude){
+					selectedIndividuals.push(this.members[i]);
+				}
+				else{
+					remainingIndividuals.push(this.members[i]);
+				}
+
 
 			}
 
-		}
-
-	}
-
-	if (toInclude){
-		selectedIndividuals.push(this.members[i]);
-	}
-	else{
-		remainingIndividuals.push(this.members[i]);
-	}
+			this.members.splice(0,this.members.length);
+			Array.prototype.push.apply(this.members, remainingIndividuals);
 
 
-}
+			printCromosome(selectedIndividuals);
 
-this.members.splice(0,this.members.length);
-Array.prototype.push.apply(this.members, remainingIndividuals);
+			console.log(generationCount);
 
+//			store the paretoIndividuals 
+			if(!storeNonDominatedIndividuals[generationCount] ){
+				var paretoIndividuals = [];
 
-printCromosome(selectedIndividuals);
+				// remove individuals with cost and satisfaction 0
+				var chosenDesirableIndividuals = []
 
-console.log(generationNumber);
+				selectedIndividuals.forEach(function (f){
+					if(f.cost > 0 || f.satisfaction > 0)
+						chosenDesirableIndividuals.push(f);
 
-// store the paretoIndividuals 
-if(!storeNonDominatedIndividuals[generationNumber] ){
-	var paretoIndividuals = [];
-	Array.prototype.push.apply(paretoIndividuals, selectedIndividuals);
-	storeNonDominatedIndividuals[generationNumber] = paretoIndividuals;
-}
+				});
 
-if(lastGeneration == true )
-	return selectedIndividuals;
+				Array.prototype.push.apply(paretoIndividuals, chosenDesirableIndividuals);
+				storeNonDominatedIndividuals[generationCount] = paretoIndividuals;
+			}
+
+			if(lastGeneration == true )
+				return selectedIndividuals;
 
 		}while (selectedIndividuals.length < populationSize && remainingIndividuals.length != 0);
-		
+
 		//increment the generation counter
-		generationNumber++;
+		generationCount++;
 
 		return selectedIndividuals;
 
 	};
+
+
+	function selectParetoIndividuals(members){
+
+		var selectedIndividuals = [];
+		var remainingIndividuals = [];
+
+		for (var i = 0; i < members.length; i++) {
+
+			var highCost = members[i].cost;
+			var bestSatisfaction = members[i].satisfaction;
+			var toInclude = true;
+
+			for (var j = 0; j < members.length ; j++) {
+
+				if( j !== i){
+
+					if ((members[j].cost >= highCost && members[j].satisfaction >= bestSatisfaction) ) {
+
+						toInclude = false;
+						break;
+
+					}
+
+				}
+
+			}
+
+			if (toInclude){
+				selectedIndividuals.push(members[i]);
+			}
+			else{
+				remainingIndividuals.push(members[i]);
+			}
+
+
+		}
+
+		return [selectedIndividuals, remainingIndividuals];
+
+	}
 
 
 	Population.prototype.ReadyInitialPopulation = function() {
@@ -700,17 +760,17 @@ if(lastGeneration == true )
 			if(generationNumber == 0){
 
 				nonDominatedSolutions = this.NonDominatedSort(populationSize, 0);
-			//	storeNonDominatedSolutions[generationNumber] = nonDominatedSolutions;
-				
+				//	storeNonDominatedSolutions[generationNumber] = nonDominatedSolutions;
+
 			}
 			else{
-				
+
 				// just for storing the non-dominated individuals following code is added
 //				onlyParetoIndividuals = this.NonDominatedSort(populationSize,0);
 //				storeNonDominatedSolutions[generationNumber] = onlyParetoIndividuals;
-				
+
 				nonDominatedSolutions = this.NonDominatedSort(populationSize);
-				
+
 			}
 
 
@@ -722,46 +782,46 @@ if(lastGeneration == true )
 			/**Roulette wheel selection
 			 *
 			    var newGenerationPopulation = [];
-			
+
 			    while(newGenerationPopulation.length < populationSize){
-			
-			
+
+
 			    var totalFitness = [];
-			
+
 			     var cumF = new cumulativeFitness();
 			     cumF.low = 0;
 			     cumF.high = this.members[0].cost;
 			     totalFitness.push(cumF);
-			
-			
-			
+
+
+
 			    for(var k = 1; k < this.members.length; k++){
-			
+
 			     var cumF = new cumulativeFitness();
 			     cumF.low = totalFitness[k-1].high;
 			     cumF.high = cumF.low + this.members[k].cost;
-			
+
 			     totalFitness.push(cumF);
-			
-			
+
+
 			    }
-			
+
 			    console.log(totalFitness);
-			
+
 			    var chosenSlice = Math.random()*(totalFitness[totalFitness.length-1].high);
-			
+
 			    var index = getIndex(chosenSlice,totalFitness);
-			
+
 			    newGenerationPopulation.push(this.members[index]);
-			
+
 			    console.log(chosenSlice);
-			
+
 			    }
-			
+
 			    // apply selection
-			
+
 			    console.log(newGenerationPopulation.length);
-			
+
 			    this.members = newGenerationPopulation; */
 
 			//apply Elitist selection
@@ -782,7 +842,73 @@ if(lastGeneration == true )
 
 		console.log("After evolution");
 
-		var solutions = [];
+		console.log(generationCount);
+
+		// collect all the non-dominated solutions
+		// and store them
+
+		var paretoSolutionOfGenerations = [];
+
+		for(var genNum = 1; genNum < (generationCount + 1 ); genNum++ ){
+
+			var solutions = [];
+			//		var paretoChromosomes = storeNonDominatedIndividuals[genNum];
+			
+			
+			//Perform selection to find non-dominated individuals
+			var getArray = selectParetoIndividuals(storeNonDominatedIndividuals[genNum]);
+			var paretoChromosomes = getArray[0];
+
+
+			for (var j = 0; j < paretoChromosomes.length; j++) {
+
+
+				console.log(paretoChromosomes[j].cost);
+				var solutionData = new Object();
+
+				solutionData.cost = -paretoChromosomes[j].cost;
+				solutionData.totalSatisfaction = paretoChromosomes[j].satisfaction;
+
+				var arr = getStructure(paretoChromosomes[j]);
+				solutionData.struct = arr[0];
+
+				solutionData.costData = arr[1];
+				solutionData.satisfaction = arr[2];
+
+				if(solutionData.costData > 0 || solutionData.satisfaction >0)
+					solutions.push(solutionData);
+
+
+
+			}
+
+			// if there is only one solution add another default solution
+
+			if(solutions.length == 1){
+
+				var solutionData = new Object();
+
+				solutionData.struct = [];
+
+				solutionData.costData = 0;
+				solutionData.satisfaction = 0;
+
+				solutions.push(solutionData);
+
+			}
+
+			paretoSolutionOfGenerations[genNum] = solutions;
+
+
+
+
+		}
+
+		return paretoSolutionOfGenerations;
+
+		// original code
+
+		/*	var solutions = [];
 
 
 		for (var j = 0; j < this.members.length; j++) {
@@ -810,7 +936,7 @@ if(lastGeneration == true )
 
 		printCromosome(this.members);
 
-		return solutions;
+		return solutions;*/
 
 	}
 	;
